@@ -1,7 +1,7 @@
 const publicRuntimeConfig = {
     NODE_ENV: process.env.NODE_ENV || "production",
     API_URL: process.env.REACT_APP_API_URL,
-    LOCAL_STORAGE_TOKEN: process.env.REACT_APP_TOKEN_NAME,
+    LOCAL_STORAGE_TOKEN: "authorization",
     // create fake token here
 };
 

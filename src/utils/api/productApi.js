@@ -5,6 +5,18 @@ const productApi = {
         const url = `/api/coin`;
         return get(url, {}, { Authorization: token });
     },
+    login: (email, password) => {
+        const url = `/auth/login`;
+        return post(
+            url,
+            {
+                email: email,
+                password: password,
+            },
+            {},
+            {}
+        );
+    },
 
     postEvent: (event, token) => {
         const url = "/event/new";

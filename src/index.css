@@ -1,14 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
-body {
-    font-family: "Roboto", sans-serif;
-}
-
-h1,
-h2,
-h3 {
-    font-family: "Roboto", sans-serif;
-}
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,600;0,700;1,600;1,700&display=swap");
 *,
 *:before,
 *:after {
@@ -29,4 +19,6 @@ video {
 body {
     min-height: 100vh;
 }
-/* etc. */
+.ant-dropdown-menu-submenu-title {
+    font-size: 20px !important;
+}

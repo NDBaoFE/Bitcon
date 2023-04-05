@@ -5,64 +5,72 @@ import productApi from "../../utils/api/productApi";
 import localStorageUtils from "../../utils/localStorageUtils";
 import Modal from "../Modal";
 import { Container, ChartContainer } from "../style";
-import "../chart.css";
+import { useNavigate } from "react-router-dom";
 import ChartComponent from "./Chart";
 import Buttons from "../Button/Buttons";
-const Chart = () => {
-    const token = localStorageUtils.getItem("token");
 
+import { ActionWrapper, MainWrapper } from "./styled";
+import View from "../View";
+import Profile from "../Profile";
+import socket from "../../socket";
+const Chart = () => {
+    const token = localStorageUtils.getItem("authorization");
+    const navigate = useNavigate();
     const [bitcoinPrices, setBitcoinPrices] = useState([]);
     const [realTimePrice, setRealTimePrice] = useState("Loading...");
     const [showModal, setShowModal] = useState(false);
     const [balance, setBalance] = useState(100000);
     const [countdown, SetCountDown] = useState(60);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const socketRef = useRef();
-
-    useEffect(() => {
-        getALlEvent();
-    }, []);
-    const getALlEvent = async () => {
+    const [coins, setCoins] = useState([]);
+    const getCoin = async () => {
         const path = await productApi.getCoin(token);
         //SetUpdated(true);
         // if (path.data.code === 408) {
         //     toastError("Token hết hạn");
         // }
-
+        setCoins(path);
         //dispatch(setEvent(path.data.data || []));
     };
 
     useEffect(() => {
-        socketRef.current = io("http://localhost:8080");
-
+        const auth = localStorageUtils.getItem("authorization");
+        if (!auth) {
+            navigate("/login");
+        } else {
+            console.log("once please");
+        }
+        getCoin();
         return () => {
-            socketRef.current.disconnect();
+            socket.disconnect();
         };
-    }, []);
+    }, [socket, token]);
 
     useEffect(() => {
-        socketRef.current.on("bitcoinPrice", (price) => {
-            setRealTimePrice(price);
-            socketRef.current.emit("receiveCoin");
-            setBitcoinPrices((prevPrices) => {
-                const newPrices = [
-                    ...prevPrices,
-                    {
-                        time: `${new Date().getMinutes()} : ${new Date().getSeconds()}`,
-                        price,
-                    },
-                ];
+        if (socket) {
+            socket.on("bitcoinPrice", (price) => {
+                setRealTimePrice(price);
+                socket.emit("receiveCoin");
+                setBitcoinPrices((prevPrices) => {
+                    const newPrices = [
+                        ...prevPrices,
+                        {
+                            time: `${new Date().getMinutes()} : ${new Date().getSeconds()}`,
+                            price,
+                        },
+                    ];
 
-                return newPrices.slice(-25);
+                    return newPrices.slice(-25);
+                });
+                setIsButtonDisabled(false);
             });
-            setIsButtonDisabled(false);
-        });
-        socketRef.current.on("balance", (balance) => {
-            setBalance(balance);
-        });
-        socketRef.current.on("countdown", (countdown) => {
-            SetCountDown(countdown);
-        });
+            socket.on("balance", (balance) => {
+                setBalance(balance);
+            });
+            socket.on("countdown", (countdown) => {
+                SetCountDown(countdown);
+            });
+        }
     }, []);
     useEffect(() => {
         setIsButtonDisabled(false);
@@ -74,23 +82,32 @@ const Chart = () => {
 
     return (
         <Container>
-            <Modal isOpen={showModal} onClose={handleCloseModal} />
-            <ChartContainer>
-                <section>
-                    <h1>Current Bitcon Price: ${realTimePrice}</h1>
-                    <h1>Time remaining : {countdown}</h1>
-                    <ChartComponent bitcoinPrices={bitcoinPrices} />
-                </section>
-            </ChartContainer>
-            <Buttons
-                setRealTimePrice={setRealTimePrice}
-                SetCountDown={SetCountDown}
-                setShowModal={setShowModal}
-                isButtonDisabled={isButtonDisabled}
-                balance={balance}
-                setBalance={setBalance}
-                setIsButtonDisabled={setIsButtonDisabled}
-            />
+            <MainWrapper>
+                <Modal isOpen={showModal} onClose={handleCloseModal} />
+                <ChartContainer>
+                    <section>
+                        <h1>Current Bitcon Price: ${realTimePrice}</h1>
+                        <h1>Time remaining : {countdown}</h1>
+                        <ChartComponent
+                            bitcoinPrices={bitcoinPrices}
+                            coins={coins}
+                        />
+                    </section>
+                </ChartContainer>
+                <View />
+            </MainWrapper>
+            <ActionWrapper>
+                <Profile />
+                <Buttons
+                    setRealTimePrice={setRealTimePrice}
+                    SetCountDown={SetCountDown}
+                    setShowModal={setShowModal}
+                    isButtonDisabled={isButtonDisabled}
+                    balance={balance}
+                    setBalance={setBalance}
+                    setIsButtonDisabled={setIsButtonDisabled}
+                />
+            </ActionWrapper>
         </Container>
     );
 };

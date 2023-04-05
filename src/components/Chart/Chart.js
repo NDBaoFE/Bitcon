@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
+
 import {
     LineChart,
     Line,
@@ -10,11 +10,10 @@ import {
     ReferenceArea,
     ResponsiveContainer,
 } from "recharts";
-
-import "../chart.css";
+import { ChartContainer } from "../style";
 
 import DropDown from "../DropDown";
-function ChartComponent({ bitcoinPrices }) {
+function ChartComponent({ bitcoinPrices, coins }) {
     const [zoomGraph, setZoomGraph] = useState({
         left: "dataMin",
         right: "dataMax",
@@ -106,71 +105,73 @@ function ChartComponent({ bitcoinPrices }) {
             >
                 Zoom Out
             </button>
-            <DropDown />
-            <ResponsiveContainer>
-                <LineChart
-                    width={740}
-                    height={400}
-                    data={bitcoinPrices}
-                    margin={{ top: 50, right: 30, left: 0, bottom: 0 }}
-                    onMouseDown={(e) =>
-                        setZoomGraph((prev) => ({
-                            ...prev,
-                            refAreaLeft: e.activeLabel,
-                        }))
-                    }
-                    onMouseMove={(e) =>
-                        zoomGraph.refAreaLeft &&
-                        setZoomGraph((prev) => ({
-                            ...prev,
-                            refAreaRight: e.activeLabel,
-                        }))
-                    }
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onMouseUp={() => zoom()}
-                >
-                    <Line
-                        type="monotone"
-                        dataKey="price"
-                        stroke="#A2A1FF"
-                        strokeWidth={3}
-                        dot={false}
-                        animationDuration={300}
-                    />
-                    {refAreaLeft && refAreaRight ? (
-                        <ReferenceArea
-                            yAxisId="1"
-                            x1={refAreaLeft}
-                            x2={refAreaRight}
-                            strokeOpacity={0.3}
+            {/* //    <DropDown item={coins} /> */}
+            <ChartContainer>
+                <ResponsiveContainer>
+                    <LineChart
+                        width={800}
+                        height={400}
+                        data={bitcoinPrices}
+                        margin={{ top: 50, right: 30, left: 0, bottom: 0 }}
+                        onMouseDown={(e) =>
+                            setZoomGraph((prev) => ({
+                                ...prev,
+                                refAreaLeft: e.activeLabel,
+                            }))
+                        }
+                        onMouseMove={(e) =>
+                            zoomGraph.refAreaLeft &&
+                            setZoomGraph((prev) => ({
+                                ...prev,
+                                refAreaRight: e.activeLabel,
+                            }))
+                        }
+                        // eslint-disable-next-line react/jsx-no-bind
+                        onMouseUp={() => zoom()}
+                    >
+                        <Line
+                            type="monotone"
+                            dataKey="price"
+                            stroke="#A2A1FF"
+                            strokeWidth={3}
+                            dot={false}
+                            animationDuration={300}
                         />
-                    ) : null}
-                    <CartesianGrid
-                        stroke="#F8F8F8"
-                        strokeDasharray="5 5"
-                        yAxis={null}
-                        xAxis={null}
-                        opacity={0.04}
-                    ></CartesianGrid>
-                    <XAxis
-                        dataKey="time"
-                        stroke="#ccc"
-                        tick={{ fontSize: 14 }}
-                        strokeOpacity={0}
-                        domain={left && right ? [left, right] : undefined}
-                        interval={1}
-                    />
-                    <YAxis
-                        domain={[bottom, top]}
-                        stroke="#ccc"
-                        tick={{ fontSize: 14 }}
-                        width={80}
-                        strokeOpacity={0}
-                    />
+                        {refAreaLeft && refAreaRight ? (
+                            <ReferenceArea
+                                yAxisId="1"
+                                x1={refAreaLeft}
+                                x2={refAreaRight}
+                                strokeOpacity={0.3}
+                            />
+                        ) : null}
+                        <CartesianGrid
+                            stroke="#F8F8F8"
+                            strokeDasharray="5 5"
+                            yAxis={null}
+                            xAxis={null}
+                            opacity={0.04}
+                        ></CartesianGrid>
+                        <XAxis
+                            dataKey="time"
+                            stroke="#ccc"
+                            tick={{ fontSize: 14 }}
+                            strokeOpacity={0}
+                            domain={left && right ? [left, right] : undefined}
+                            interval={1}
+                        />
+                        <YAxis
+                            domain={[bottom, top]}
+                            stroke="#ccc"
+                            tick={{ fontSize: 14 }}
+                            width={80}
+                            strokeOpacity={0}
+                        />
 
-                    <Tooltip />
-                </LineChart>
-            </ResponsiveContainer>
+                        <Tooltip />
+                    </LineChart>
+                </ResponsiveContainer>
+            </ChartContainer>
         </>
     );
 }

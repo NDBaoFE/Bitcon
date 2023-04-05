@@ -5,6 +5,7 @@ import LayoutComponent from "../components/Layout";
 
 import Home from "./home";
 import Chart from "../components/Chart";
+import Login from "./login";
 
 const publicRoute = [
     {
@@ -22,7 +23,15 @@ const publicRoute = [
         restrict: true,
     },
 ];
-const adminRoute = [];
+const adminRoute = [
+    {
+        index: true,
+        path: "login",
+        component: <Login />,
+        exact: true,
+        restrict: true,
+    },
+];
 
 const RouterComponent = () => {
     // useAutoLogout(jwt);
@@ -45,7 +54,7 @@ const RouterComponent = () => {
                     </Route>
                 </Route>
                 <Route exact element={<AdminRoute />}>
-                    <Route exact element={<LayoutComponent />}>
+                    <Route exact>
                         {adminRoute.map((route) => (
                             <Route
                                 index={route.index}

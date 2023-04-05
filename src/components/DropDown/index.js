@@ -1,7 +1,7 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { useState } from "react";
-const DropDown = () => {
+const DropDown = ({ items }) => {
     const [open, setOpen] = useState(false);
     const handleMenuClick = (e) => {
         if (e.key === "3") {
@@ -11,20 +11,20 @@ const DropDown = () => {
     const handleOpenChange = (flag) => {
         setOpen(flag);
     };
-    const items = [
-        {
-            label: "Clicking me will not close the menu.",
-            key: "1",
-        },
-        {
-            label: "Clicking me will not close the menu also.",
-            key: "2",
-        },
-        {
-            label: "Clicking me will close the menu.",
-            key: "3",
-        },
-    ];
+    // const items = [
+    //     {
+    //         label: "Clicking me will not close the menu.",
+    //         key: "1",
+    //     },
+    //     {
+    //         label: "Clicking me will not close the menu also.",
+    //         key: "2",
+    //     },
+    //     {
+    //         label: "Clicking me will close the menu.",
+    //         key: "3",
+    //     },
+    // ];
     return (
         <Dropdown
             menu={{

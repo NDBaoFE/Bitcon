@@ -2,24 +2,29 @@ import styled from "styled-components";
 import { themes } from "../utils/theme/theme";
 export const Container = styled.div`
     display: flex;
-    justify-content: center;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
     h1 {
         margin-left: 60px;
     }
+    font-family: "Nunito Sans", sans-serif;
+    height: 100vh;
 `;
 export const ChartContainer = styled.div`
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 20px;
-    margin-bottom: 40px;
     display: flex;
+    width: 800px;
+    height: 400px;
     justify-content: space-around;
-    background: ${themes.colors.dark};
+    background: ${themes.colors.background};
     color: white;
-    font-family: Roboto;
+    font-family: "Nunito Sans", sans-serif;
+    margin-bottom: 30px;
     section {
         display: flex;
-        background: #252a36;
+        background: ${themes.colors.background};
         flex-direction: column;
         border-radius: 10px;
     }
@@ -57,6 +62,7 @@ export const ButtonContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: white;
 `;
 export const ModalWrapper = styled.div`
     position: fixed;
