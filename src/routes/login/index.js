@@ -13,18 +13,20 @@ import {
     StyledInput,
     LoginBtn,
 } from "./style";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import productApi from "../../utils/api/productApi";
 import { Checkbox } from "antd";
 import { Col, Form, Row } from "antd";
 import Logo from "../../assets/images/Bitcoin.png";
 import { toastError, toastSuccess } from "../../components/ToastNotification";
+import { actions } from "../profile/slice";
 import localStorageUtils from "../../utils/localStorageUtils";
-
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [form] = StyledForm.useForm();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -37,10 +39,19 @@ function Login() {
             const res = await productApi.login(value.email, value.password);
             switch (await res.status) {
                 case 200:
+                    console.log(res.data.account.fullname);
+                    dispatch(
+                        actions.getInitialAccount(res.data.account.fullname)
+                    );
                     toastSuccess("Login Succesfully");
-                    console.log(res.data.token);
+
                     localStorageUtils.setItem("authorization", res.data.token);
-                    navigate("/chart");
+                    localStorageUtils.setItem(
+                        "user",
+                        res.data.account.fullname
+                    );
+                    localStorageUtils.setItem("image", res.data.account.image);
+                    navigate("/home");
                     break;
                 default:
                     toastError("Login no success");
@@ -48,6 +59,7 @@ function Login() {
             }
         } catch (e) {
             console.log(e);
+            toastError("Can't login right now, please try again later");
         }
     };
     const handleFinishFailed = async (value) => {
@@ -59,8 +71,7 @@ function Login() {
     };
     return (
         <Container>
-            <LeftWrapper></LeftWrapper>
-
+            <LeftWrapper />
             <RightWrapper>
                 <LoginContainer>
                     <Img src={Logo} />

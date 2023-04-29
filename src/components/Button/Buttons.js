@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
 
 import { ButtonContainer, Upbutton, Downbutton } from "../style";
 
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import InputWithButtons from "./InputWithButton";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import socket from "../../socket";
+import { createSocketConnection, getSocket } from "../../socket";
 function Buttons({
     setRealTimePrice,
     SetCountDown,
@@ -24,9 +23,9 @@ function Buttons({
     const [bitcoinPrices, setBitcoinPrices] = useState([]);
 
     useEffect(() => {
-        socket.on("bitcoinPrice", (price) => {
+        getSocket().on("bitcoinPrice", (price) => {
             setRealTimePrice(price);
-            socket.emit("receiveCoin");
+            getSocket().emit("receiveCoin");
             setBitcoinPrices((prevPrices) => {
                 const newPrices = [
                     ...prevPrices,
@@ -40,10 +39,10 @@ function Buttons({
             });
             setIsButtonDisabled(false);
         });
-        socket.on("balance", (balance) => {
+        getSocket().on("balance", (balance) => {
             setBalance(balance);
         });
-        socket.on("countdown", (countdown) => {
+        getSocket().on("countdown", (countdown) => {
             SetCountDown(countdown);
         });
     }, []);
@@ -53,13 +52,11 @@ function Buttons({
 
     const handleSentData = (direction) => {
         setShowModal(true);
-        socket.emit("placeBet", { amount: amount, direction });
+        getSocket().emit("placeBet", { amount: amount, direction });
         setIsButtonDisabled(true);
     };
     return (
         <ButtonContainer>
-            <h2>Balance:</h2>
-            <h2> ${balance}</h2>
             <InputWithButtons value={amount} onChange={handleAmountChange} />
             <Upbutton
                 onClick={() => handleSentData("higher")}

@@ -1,15 +1,8 @@
 import styled from "styled-components";
 import { themes } from "../utils/theme/theme";
+import { Layout } from "antd";
 export const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    h1 {
-        margin-left: 60px;
-    }
     font-family: "Nunito Sans", sans-serif;
-    height: 100vh;
 `;
 export const ChartContainer = styled.div`
     border-radius: 10px;
@@ -22,6 +15,7 @@ export const ChartContainer = styled.div`
     color: white;
     font-family: "Nunito Sans", sans-serif;
     margin-bottom: 30px;
+    margin: 30px auto;
     section {
         display: flex;
         background: ${themes.colors.background};
@@ -108,4 +102,18 @@ export const ModalButton = styled.button`
     &:hover {
         background-color: #0069d9;
     }
+`;
+export const ActionWrapper = styled.div`
+    width: 350px;
+    min-height: 100vh;
+    background: ${themes.colors.background};
+    display: flex;
+    position: fixed;
+    right: 0;
+    top: 0;
+    justify-content: center;
+`;
+export const StyledLayout = styled(Layout)`
+    margin-left: ${(props) => (props.collapsed === true ? "80px" : "240px")};
+    transition: 0.3s ease;
 `;

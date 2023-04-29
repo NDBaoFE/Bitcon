@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import {
     LineChart,
@@ -12,8 +12,7 @@ import {
 } from "recharts";
 import { ChartContainer } from "../style";
 
-import DropDown from "../DropDown";
-function ChartComponent({ bitcoinPrices, coins }) {
+function ChartComponent({ bitcoinPrices }) {
     const [zoomGraph, setZoomGraph] = useState({
         left: "dataMin",
         right: "dataMax",

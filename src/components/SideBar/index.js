@@ -4,19 +4,13 @@ import { Menu } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import SidebarLink from "../SideBarLink";
-import { Logo, SideBar, Wrapper, SignOut } from "./style";
-
+import { Logo, SideBar, Wrapper, SignOut, Button, Container } from "./style";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import StadiumIcon from "@mui/icons-material/Stadium";
 import {
     HomeOutlined,
     LogoutOutlined,
-    TeamOutlined,
-    CalendarOutlined,
-    InboxOutlined,
-    SendOutlined,
-    NotificationOutlined,
-    UsergroupAddOutlined,
-    CommentOutlined,
-    UserOutlined,
+    ProfileOutlined,
 } from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
@@ -31,91 +25,69 @@ function getItem(label, key, icon, children) {
 //<SidebarLink to="/account" child="Quản lý tài khoản" />
 const itemsAdmin = [
     getItem(
-        <SidebarLink to="/home" child="Trang Chủ" />,
+        <SidebarLink to="/home" child="Home" />,
         "/home",
-        <HomeOutlined />
+        <HomeOutlined style={{ fontSize: "24px" }} />
     ),
     getItem(
-        <SidebarLink to="/event" child="Quản lý sự kiện" />,
-        "/event",
-        <CalendarOutlined />
+        <SidebarLink to="/profile" child="Profile" />,
+        "/profile",
+        <ProfileOutlined style={{ fontSize: "24px" }} />
     ),
     getItem(
-        <SidebarLink to="/manage-resource" child="Quản lý tài nguyên" />,
-        "/manage-resource",
-        <InboxOutlined />
+        <SidebarLink to="/leaderboard" child="Leaderboard " />,
+        "/leaderboard",
+        <LeaderboardIcon style={{ fontSize: "large" }} />
     ),
 
     getItem(
-        <SidebarLink to="/manage-announcement" child="Quản lý thông báo" />,
-        "/manage-announcement",
-        <NotificationOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/recruitmembers" child="Tuyển thành viên" />,
-        "/recruitmembers",
-        <UsergroupAddOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/comment" child="Quản lý bình luận, câu hỏi" />,
-        "/comment",
-        <CommentOutlined />
+        <SidebarLink to="/chart " child="Chart" />,
+        "/chart",
+        <StadiumIcon style={{ fontSize: "24px" }} />
     ),
 ];
-const itemsUser = [
-    getItem(
-        <SidebarLink to="/home" child="Trang chủ" />,
-        "/home",
-        <HomeOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/event" child="Sự kiện" />,
-        "/event",
-        <CalendarOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/manage-resource" child="Tài nguyên" />,
-        "/manage-resource",
-        <InboxOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/personal-blog" child="Bài viết" />,
-        "/personal-blog",
-        <SendOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/account" child="Tất cả thành viên" />,
-        "/account",
-        <TeamOutlined />
-    ),
-    getItem(
-        <SidebarLink to="/notifications" child="Thông báo" />,
-        "/notifications",
-        <NotificationOutlined />
-    ),
-    // [
-    //     getItem(<SidebarLink to="/announcement/view-announcement" child="Xem thông báo" />, '9'),
-    // ]),
-    getItem(
-        <SidebarLink to="/account/edit-account" child="Thông tin cá nhân" />,
-        "/account/view-account/:id",
-        <UserOutlined />
-        // [getItem(<SidebarLink to="/account/view-account/:id" child="xem thông tin" />, '10')]
-    ),
-];
+const itemsUser = [];
 
-const SidebarComponent = () => {
+const SidebarComponent = ({ collapsed, setCollapsed }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [selectedKey, setSelectedKey] = useState(`${location.pathname}`);
-
+    console.log(`${location.pathname}`);
     useEffect(() => {
-        setSelectedKey(`${location.pathname}`);
-    }, [location]);
+        navigate(selectedKey);
+    }, [selectedKey, navigate]);
     return (
         <Wrapper>
-            <SideBar width="250px">
-                <Logo></Logo>
+            <SideBar width="240px" collapsed={collapsed}>
+                <Container>
+                    {" "}
+                    <Logo>Hii</Logo>
+                    <Button
+                        onClick={() => {
+                            setCollapsed(!collapsed);
+                        }}
+                        collapsed={collapsed}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M22 12H3" stroke="#11142d"></path>
+                            <g stroke="#808191">
+                                <path d="M22 4H13"></path>
+                                <path opacity=".301" d="M22 20H13"></path>
+                            </g>
+                            <path d="M7 7l-5 5 5 5" stroke="#11142d"></path>
+                        </svg>
+                    </Button>
+                </Container>
+
                 <Menu
                     defaultSelectedKeys={[selectedKey]}
                     defaultOpenKeys={["blog", "account"]}
@@ -127,8 +99,10 @@ const SidebarComponent = () => {
                     items={itemsAdmin}
                 />
                 <SignOut onClick={() => console.log("hi")}>
-                    <LogoutOutlined style={{ paddingRight: 10 }} />
-                    Đăng Xuất
+                    <LogoutOutlined
+                        style={{ paddingRight: 10, fontSize: "24px" }}
+                    />
+                    Logout
                 </SignOut>
             </SideBar>
         </Wrapper>

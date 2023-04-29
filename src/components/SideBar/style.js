@@ -7,19 +7,18 @@ const { Sider } = Layout;
 export const Logo = styled.div`
     display: flex;
     align-items: center;
-    font-family: "Roboto";
+    font-family: "Nunito Sans", sans-serif;
     font-style: normal;
     font-weight: 900;
     font-size: 16px;
     line-height: 24px;
     color: #45ce7c;
-    margin: 38px 0px;
     height: 32px;
-    margin: 16px;
+    margin: 20px 0;
 `;
 
 export const Wrapper = styled.div`
-    font-family: "Roboto", sans-serif;
+    font-family: "Nunito Sans", sans-serif;
     .ant-layout-sider {
         background-color: ${themes.colors.background};
     }
@@ -130,17 +129,21 @@ export const Wrapper = styled.div`
 `;
 export const SideBar = styled(Sider)`
     /* min-width: 200px; */
+    font-family: "Nunito Sans", sans-serif;
     position: fixed !important;
-    height: 100vh;
+    min-height: 100vh;
     top: 0;
     bottom: 0;
     left: 0;
+    .ant-menu {
+        font-size: 16px;
+    }
 `;
 
 export const SignOut = styled.button`
     display: flex;
     align-items: center;
-    font-family: "Roboto";
+    font-family: "Nunito Sans", sans-serif;
     color: rgba(255, 255, 255, 0.85);
     position: absolute;
     bottom: 20px;
@@ -148,4 +151,31 @@ export const SignOut = styled.button`
     background-color: transparent;
     border: none;
     cursor: pointer;
+`;
+export const Button = styled.button`
+    background: transparent;
+    border: none;
+
+    svg {
+        transform: ${(props) =>
+            props.collapsed === true ? "scale(-1, -1);" : "none"};
+        transition: transform 0.2s, -webkit-transform 0.2s;
+    }
+    svg path {
+        stroke: white;
+    }
+    svg g {
+        stroke: rgba(128, 129, 145, 0.7);
+        path {
+            stroke: rgba(128, 129, 145, 0.7);
+        }
+    }
+    svg g path:nth-child(2) {
+        opacity: 0.6;
+    }
+`;
+export const Container = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 `;

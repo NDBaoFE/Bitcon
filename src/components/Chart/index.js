@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
+import React, { useState, useEffect } from "react";
 
-import productApi from "../../utils/api/productApi";
 import localStorageUtils from "../../utils/localStorageUtils";
 import Modal from "../Modal";
 import { Container, ChartContainer } from "../style";
@@ -9,68 +7,90 @@ import { useNavigate } from "react-router-dom";
 import ChartComponent from "./Chart";
 import Buttons from "../Button/Buttons";
 
-import { ActionWrapper, MainWrapper } from "./styled";
+import {
+    ActionWrapper,
+    MainWrapper,
+    HeaderWrapper,
+    Coin,
+    Left,
+    Right,
+    Price,
+    OldPrice,
+    Card,
+    Hero,
+    Balance,
+} from "./styled";
 import View from "../View";
 import Profile from "../Profile";
-import socket from "../../socket";
+import productApi from "../../utils/api/productApi";
+import { createSocketConnection, getSocket } from "../../socket";
+import Number from "../AnimatedNumber";
+//only create connection only when the user login , otherwise just use socket regularly
+import DropDown from "../DropDown";
+import RadialChart from "../RadialChart";
 const Chart = () => {
     const token = localStorageUtils.getItem("authorization");
     const navigate = useNavigate();
     const [bitcoinPrices, setBitcoinPrices] = useState([]);
     const [realTimePrice, setRealTimePrice] = useState("Loading...");
     const [showModal, setShowModal] = useState(false);
-    const [balance, setBalance] = useState(100000);
+    const [balance, setBalance] = useState(100);
     const [countdown, SetCountDown] = useState(60);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [coins, setCoins] = useState([]);
-    const getCoin = async () => {
-        const path = await productApi.getCoin(token);
-        //SetUpdated(true);
-        // if (path.data.code === 408) {
-        //     toastError("Token hết hạn");
-        // }
-        setCoins(path);
-        //dispatch(setEvent(path.data.data || []));
-    };
+    const [items, setItems] = useState(null);
+    const [rate, setRate] = useState(null);
+    const [label, setLabel] = useState({
+        name: "BitCoin",
+        img: "https://static2.crypto.com/exchange/token-icons/dark/BTC.png",
+        symbol: "BTC",
+    });
 
     useEffect(() => {
         const auth = localStorageUtils.getItem("authorization");
         if (!auth) {
             navigate("/login");
         } else {
-            console.log("once please");
+            createSocketConnection();
         }
-        getCoin();
         return () => {
-            socket.disconnect();
+            getSocket().disconnect();
         };
-    }, [socket, token]);
+    }, [token]);
 
     useEffect(() => {
-        if (socket) {
-            socket.on("bitcoinPrice", (price) => {
-                setRealTimePrice(price);
-                socket.emit("receiveCoin");
-                setBitcoinPrices((prevPrices) => {
-                    const newPrices = [
-                        ...prevPrices,
-                        {
-                            time: `${new Date().getMinutes()} : ${new Date().getSeconds()}`,
-                            price,
-                        },
-                    ];
+        getSocket().on("bitcoinPrice", (price) => {
+            setRealTimePrice(price);
+            getSocket().emit("receiveCoin");
+            setBitcoinPrices((prevPrices) => {
+                const rate =
+                    Math.round(
+                        (prevPrices[prevPrices.length - 1]?.price / price) *
+                            100000
+                    ) / 1000;
 
-                    return newPrices.slice(-25);
-                });
-                setIsButtonDisabled(false);
+                console.log(rate);
+                setRate(rate > 0 ? 100 - rate : rate);
+                const newPrices = [
+                    ...prevPrices,
+                    {
+                        time: `${new Date().getMinutes()} : ${new Date().getSeconds()}`,
+                        price,
+                    },
+                ];
+
+                return newPrices.slice(-25); // only get 25 of the latest price
             });
-            socket.on("balance", (balance) => {
-                setBalance(balance);
-            });
-            socket.on("countdown", (countdown) => {
-                SetCountDown(countdown);
-            });
-        }
+            setIsButtonDisabled(false);
+        });
+        getSocket().on("balance", (balance) => {
+            setBalance(balance);
+        });
+        getSocket().on("countdown", (countdown) => {
+            SetCountDown(countdown);
+        });
+        getSocket().on("coinChanged", () => {
+            setBitcoinPrices([]);
+        });
     }, []);
     useEffect(() => {
         setIsButtonDisabled(false);
@@ -79,31 +99,77 @@ const Chart = () => {
     const handleCloseModal = () => {
         setShowModal(false);
     };
+    const getCoin = async () => {
+        const path = await productApi.getCoin(token);
+        const newArr = path.data.account.data.map((obj) => {
+            const { coin_id, coin_name, coin_img, coin_symbol } = obj; // Destructure the id and rename it to key
+            return {
+                key: coin_id,
+                label: coin_name,
+                img: coin_img,
+                symbol: coin_symbol,
+            }; // Return a new object with the updated attribute name
+        });
+
+        setItems(newArr);
+    };
+    useEffect(() => {
+        getCoin();
+    }, []);
+    const onClick = ({ key }) => {
+        console.log(`Click on item ${items[key - 1].label} `);
+        setLabel({
+            name: items[key - 1].label,
+            img: items[key - 1].img,
+            symbol: items[key - 1].symbol,
+        });
+        getSocket().emit("newCoin", { newCoin: items[key - 1].label });
+    };
+    const menu = {
+        items,
+        onClick,
+    };
 
     return (
         <Container>
+            <Modal isOpen={showModal} onClose={handleCloseModal} />
             <MainWrapper>
-                <Modal isOpen={showModal} onClose={handleCloseModal} />
+                <HeaderWrapper>
+                    <Left>
+                        <Coin>
+                            <img src={label.img} alt="crypto img" />
+                            <h1>{label.name}</h1>
+                            <h3>{label.symbol}</h3>
+                        </Coin>
+                        <Price>
+                            {realTimePrice}US$
+                            <OldPrice>{rate}</OldPrice>
+                        </Price>
+                        <h1>Time remaining : {countdown}</h1>
+                    </Left>
+                    <Right>
+                        <DropDown menu={menu} label={label.name} />
+                    </Right>
+                </HeaderWrapper>
                 <ChartContainer>
                     <section>
-                        <h1>Current Bitcon Price: ${realTimePrice}</h1>
-                        <h1>Time remaining : {countdown}</h1>
-                        <ChartComponent
-                            bitcoinPrices={bitcoinPrices}
-                            coins={coins}
-                        />
+                        <ChartComponent bitcoinPrices={bitcoinPrices} />
                     </section>
                 </ChartContainer>
                 <View />
             </MainWrapper>
             <ActionWrapper>
                 <Profile />
+                <Card>
+                    {balance && <RadialChart balance={balance} />}
+                    <Hero>Total Balance</Hero>
+                    <Balance>${balance}</Balance>
+                </Card>
                 <Buttons
                     setRealTimePrice={setRealTimePrice}
                     SetCountDown={SetCountDown}
                     setShowModal={setShowModal}
                     isButtonDisabled={isButtonDisabled}
-                    balance={balance}
                     setBalance={setBalance}
                     setIsButtonDisabled={setIsButtonDisabled}
                 />

@@ -6,6 +6,9 @@ import LayoutComponent from "../components/Layout";
 import Home from "./home";
 import Chart from "../components/Chart";
 import Login from "./login";
+import LeaderBoard from "./leaderboard";
+import EditAccount from "./profile";
+import SignUp from "./signup";
 
 const publicRoute = [
     {
@@ -22,12 +25,40 @@ const publicRoute = [
         exact: true,
         restrict: true,
     },
+    {
+        index: true,
+        path: "home/:id",
+        component: <Home />,
+        exact: true,
+        restrict: true,
+    },
+    {
+        index: true,
+        path: "leaderboard",
+        component: <LeaderBoard />,
+        exact: true,
+        restrict: true,
+    },
+    {
+        index: true,
+        path: "profile",
+        component: <EditAccount />,
+        exact: true,
+        restrict: true,
+    },
 ];
 const adminRoute = [
     {
         index: true,
         path: "login",
         component: <Login />,
+        exact: true,
+        restrict: true,
+    },
+    {
+        index: true,
+        path: "signup",
+        component: <SignUp />,
         exact: true,
         restrict: true,
     },

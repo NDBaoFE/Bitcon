@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { Avatar, Dropdown, Button } from "antd";
-import { themes } from "../../utils/theme/theme";
 
 export const Wrapper = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-right: 30px;
     font-family: "Nunito Sans", sans-serif;
     margin-top: 12px;
+    height: 50px;
+    width: 100%;
+    margin-right: 100px;
 `;
 
 export const Ava = styled(Avatar)`
@@ -21,7 +22,7 @@ export const MyDropdown = styled(Dropdown)`
     color: white;
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 21px;
     margin-right: 14px;
     /* identical to box height */

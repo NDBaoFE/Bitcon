@@ -1,46 +1,18 @@
 import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
-import { useState } from "react";
-const DropDown = ({ items }) => {
-    const [open, setOpen] = useState(false);
-    const handleMenuClick = (e) => {
-        if (e.key === "3") {
-            setOpen(false);
-        }
-    };
-    const handleOpenChange = (flag) => {
-        setOpen(flag);
-    };
-    // const items = [
-    //     {
-    //         label: "Clicking me will not close the menu.",
-    //         key: "1",
-    //     },
-    //     {
-    //         label: "Clicking me will not close the menu also.",
-    //         key: "2",
-    //     },
-    //     {
-    //         label: "Clicking me will close the menu.",
-    //         key: "3",
-    //     },
-    // ];
+import { Space } from "antd";
+
+import { MyDropdown } from "./styled";
+
+const DropDown = ({ menu, label }) => {
     return (
-        <Dropdown
-            menu={{
-                items,
-                onClick: handleMenuClick,
-            }}
-            onOpenChange={handleOpenChange}
-            open={open}
-        >
+        <MyDropdown menu={menu} placement="bottomLeft" arrow>
             <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                    Hover me
-                    <DownOutlined />
+                <Space style={{ fontSize: "18px" }}>
+                    {label}
+                    <DownOutlined style={{ fontSize: "14px" }} />
                 </Space>
             </a>
-        </Dropdown>
+        </MyDropdown>
     );
 };
 export default DropDown;

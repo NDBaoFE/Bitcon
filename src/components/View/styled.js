@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { themes } from "../../utils/theme/theme";
 export const Container = styled.div`
-    min-height: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin: 30px auto;
 `;
 export const Hero = styled.h5`
     font-weight: 500;

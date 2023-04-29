@@ -1,10 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const SidebarLink = ({ child }) => {
+    const navigate = useNavigate();
     return (
         <Link
-            onClick={() => {
-                console.log("hi");
+            onClick={(e) => {
+                navigate(e.target.href);
             }}
         >
             {child}

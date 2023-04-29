@@ -7,7 +7,7 @@
 * {
     margin: 0;
     padding: 0;
-    font: inherit;
+    font-family: "Nunito Sans", sans-serif;
 }
 img,
 picture,
@@ -21,4 +21,66 @@ body {
 }
 .ant-dropdown-menu-submenu-title {
     font-size: 20px !important;
+}
+
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown .ant-dropdown-menu,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown-menu-submenu
+    .ant-dropdown-menu {
+    padding: 4px;
+    list-style-type: none;
+    background-clip: padding-box;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+        0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.5
+    ); /* Sets the background color with an alpha channel for transparency */
+    backdrop-filter: blur(5px); /* Applies a blur filter to the background */
+    -webkit-backdrop-filter: blur(
+        5px
+    ); /* Applies a blur filter to the background for Safari */
+}
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item:hover,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item:hover,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title:hover,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title:hover,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item-active,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-item-active,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title-active,
+:where(.css-dev-only-do-not-override-10ed4xt).ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title-active {
+    background-color: rgba(162, 161, 255, 1);
+    color: white;
+}
+::-webkit-input-placeholder {
+    /* Edge */
+    color: white;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: white;
+}
+
+::placeholder {
+    color: white;
 }
