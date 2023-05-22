@@ -12,6 +12,7 @@ import {
     LogoutOutlined,
     ProfileOutlined,
 } from "@ant-design/icons";
+import localStorageUtils from "../../utils/localStorageUtils";
 
 function getItem(label, key, icon, children) {
     return {
@@ -52,10 +53,12 @@ const SidebarComponent = ({ collapsed, setCollapsed }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [selectedKey, setSelectedKey] = useState(`${location.pathname}`);
-    console.log(`${location.pathname}`);
     useEffect(() => {
         navigate(selectedKey);
-    }, [selectedKey, navigate]);
+    }, [selectedKey]);
+    const handleSignOut = () => {};
+    localStorageUtils.removeItem("authorization");
+    navigate("/login");
     return (
         <Wrapper>
             <SideBar width="240px" collapsed={collapsed}>
@@ -98,7 +101,7 @@ const SidebarComponent = ({ collapsed, setCollapsed }) => {
                     }}
                     items={itemsAdmin}
                 />
-                <SignOut onClick={() => console.log("hi")}>
+                <SignOut onClick={handleSignOut}>
                     <LogoutOutlined
                         style={{ paddingRight: 10, fontSize: "24px" }}
                     />

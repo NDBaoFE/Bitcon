@@ -3,8 +3,15 @@ import { Outlet } from "react-router-dom";
 import SidebarComponent from "./SideBar/index";
 import { themes } from "../utils/theme/theme";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import localStorageUtils from "../utils/localStorageUtils";
 const { Content } = StyledLayout;
 const LayoutComponent = () => {
+    const navigate = useNavigate();
+    const token = localStorageUtils.getItem("authorization");
+    if (!token) {
+        navigate("/login");
+    }
     const [collapsed, setCollapsed] = useState(false);
     console.log(collapsed);
     return (

@@ -63,6 +63,14 @@ const productApi = {
         const url = `/auth/balance`;
         return get(url, {}, { authorization: token });
     },
+    getblogs: (token, page) => {
+        const url = `/auth/allblog?page=${page}`;
+        return get(url, {}, { authorization: token });
+    },
+    getBlogDetail: (token, id) => {
+        const url = `/auth/blog?id=${id}`;
+        return get(url, {}, { authorization: token });
+    },
 };
 
 export default productApi;

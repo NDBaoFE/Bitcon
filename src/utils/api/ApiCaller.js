@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//mport { API_URL } from '../config/index';
-
+import { API_URL } from "../../config/index";
+console.log(API_URL);
 const defaultURL = "http://localhost:8080";
 // This is config default for axios caller
 const ApiCaller = (method, endpoint, headers, params, body) => {

@@ -27,7 +27,7 @@ class LocalStorageUtils {
     }
     getJWTUser() {
         if (typeof localStorage !== "undefined") {
-            const token = this.getItem(LOCAL_STORAGE_TOKEN);
+            const token = this.getItem(LOCAL_STORAGE_TOKEN || "token");
             if (token) {
                 try {
                     const jwtUser = decodeToken(token);

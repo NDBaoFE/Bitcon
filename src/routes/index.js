@@ -9,6 +9,7 @@ import Login from "./login";
 import LeaderBoard from "./leaderboard";
 import EditAccount from "./profile";
 import SignUp from "./signup";
+import Blog from "./blog";
 
 const publicRoute = [
     {
@@ -27,7 +28,7 @@ const publicRoute = [
     },
     {
         index: true,
-        path: "home/:id",
+        path: "home/:page",
         component: <Home />,
         exact: true,
         restrict: true,
@@ -43,6 +44,13 @@ const publicRoute = [
         index: true,
         path: "profile",
         component: <EditAccount />,
+        exact: true,
+        restrict: true,
+    },
+    {
+        index: true,
+        path: "blog/:id",
+        component: <Blog />,
         exact: true,
         restrict: true,
     },

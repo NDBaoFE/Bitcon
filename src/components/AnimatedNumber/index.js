@@ -1,7 +1,6 @@
 import React from "react";
 import AnimatedNumbers from "react-animated-numbers";
 function Number({ num, ...props }) {
-    console.log(num);
     return (
         <AnimatedNumbers
             includeComma

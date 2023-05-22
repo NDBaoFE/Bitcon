@@ -1,30 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import localStorageUtils from "../../utils/localStorageUtils";
-import Modal from "../Modal";
-import { Container, ChartContainer } from "../style";
 import { useNavigate } from "react-router-dom";
-import ChartComponent from "./Chart";
+import localStorageUtils from "../../utils/localStorageUtils";
 import Buttons from "../Button/Buttons";
+import Modal from "../Modal";
+import { ChartContainer, Container } from "../style";
+import ChartComponent from "./Chart";
 
+import { createSocketConnection, getSocket } from "../../socket";
+import productApi from "../../utils/api/productApi";
+import Profile from "../Profile";
+import View from "../View";
 import {
     ActionWrapper,
-    MainWrapper,
-    HeaderWrapper,
-    Coin,
-    Left,
-    Right,
-    Price,
-    OldPrice,
-    Card,
-    Hero,
     Balance,
+    Card,
+    Coin,
+    HeaderWrapper,
+    Hero,
+    Left,
+    MainWrapper,
+    OldPrice,
+    Price,
+    Right,
 } from "./styled";
-import View from "../View";
-import Profile from "../Profile";
-import productApi from "../../utils/api/productApi";
-import { createSocketConnection, getSocket } from "../../socket";
-import Number from "../AnimatedNumber";
 //only create connection only when the user login , otherwise just use socket regularly
 import DropDown from "../DropDown";
 import RadialChart from "../RadialChart";
@@ -68,7 +67,6 @@ const Chart = () => {
                             100000
                     ) / 1000;
 
-                console.log(rate);
                 setRate(rate > 0 ? 100 - rate : rate);
                 const newPrices = [
                     ...prevPrices,
@@ -123,7 +121,7 @@ const Chart = () => {
             img: items[key - 1].img,
             symbol: items[key - 1].symbol,
         });
-        getSocket().emit("newCoin", { newCoin: items[key - 1].label });
+        getSocket().emit("newCoin", { newCoin: items[key - 1].key - 1 });
     };
     const menu = {
         items,
